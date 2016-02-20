@@ -1,0 +1,15 @@
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\KinectV2MouseControl.exe.config
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\KinectV2MouseControl.exe
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\KinectV2MouseControl.pdb
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\Microsoft.Kinect.dll
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\bin\Release\Microsoft.Kinect.xml
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.csprojResolveAssemblyReference.cache
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\MainWindow.baml
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\MainWindow.g.cs
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\App.g.cs
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl_MarkupCompile.cache
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.g.resources
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.Properties.Resources.resources
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.csproj.GenerateResource.Cache
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.exe
+C:\Users\qinzh\Downloads\KinectV2MouseControl-master\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.pdb
