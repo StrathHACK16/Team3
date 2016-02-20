@@ -23,7 +23,7 @@ namespace KinectV2MouseControl
                 Properties.Settings.Default.Save();
             }
         }
-
+        /*
         private void PauseToClickTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (PauseToClickTime.IsLoaded)
@@ -35,7 +35,7 @@ namespace KinectV2MouseControl
                 Properties.Settings.Default.Save();
             }
         }
-
+        */
         private void txtMouseSensitivity_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -48,7 +48,7 @@ namespace KinectV2MouseControl
                 }
             }
         }
-
+        /*
         private void txtTimeRequired_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -61,25 +61,25 @@ namespace KinectV2MouseControl
                 }
             }
         }
-
+        */
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MouseSensitivity.Value = Properties.Settings.Default.MouseSensitivity;
-            PauseToClickTime.Value = Properties.Settings.Default.PauseToClickTime;
-            PauseThresold.Value = Properties.Settings.Default.PauseThresold;
-            chkNoClick.IsChecked = !Properties.Settings.Default.DoClick;
-            CursorSmoothing.Value = Properties.Settings.Default.CursorSmoothing;
-            if (Properties.Settings.Default.GripGesture)
+            //PauseToClickTime.Value = Properties.Settings.Default.PauseToClickTime;
+            //PauseThresold.Value = Properties.Settings.Default.PauseThresold;
+            //chkNoClick.IsChecked = !Properties.Settings.Default.DoClick;
+            //CursorSmoothing.Value = Properties.Settings.Default.CursorSmoothing;
+            /*if (Properties.Settings.Default.GripGesture)
             {
                 rdiGrip.IsChecked = true;
             }
             else
             {
                 rdiPause.IsChecked = true;
-            }
+            }*/
 
         }
-
+        /*
         private void PauseThresold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (PauseThresold.IsLoaded)
@@ -91,7 +91,7 @@ namespace KinectV2MouseControl
                 Properties.Settings.Default.Save();
             }
         }
-
+        
         private void txtPauseThresold_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -104,16 +104,16 @@ namespace KinectV2MouseControl
                 }
             }
         }
-
+        */
         private void btnDefault_Click(object sender, RoutedEventArgs e)
         {
             MouseSensitivity.Value = KinectControl.MOUSE_SENSITIVITY;
-            PauseToClickTime.Value = KinectControl.TIME_REQUIRED;
-            PauseThresold.Value = KinectControl.PAUSE_THRESOLD;
-            CursorSmoothing.Value = KinectControl.CURSOR_SMOOTHING;
+            //PauseToClickTime.Value = KinectControl.TIME_REQUIRED;
+            //PauseThresold.Value = KinectControl.PAUSE_THRESOLD;
+            //CursorSmoothing.Value = KinectControl.CURSOR_SMOOTHING;
 
-            chkNoClick.IsChecked = !KinectControl.DO_CLICK;
-            rdiGrip.IsChecked = KinectControl.USE_GRIP_GESTURE;
+            //chkNoClick.IsChecked = !KinectControl.DO_CLICK;
+            //rdiGrip.IsChecked = KinectControl.USE_GRIP_GESTURE;
         }
 
         private void chkNoClick_Checked(object sender, RoutedEventArgs e)
@@ -124,7 +124,7 @@ namespace KinectV2MouseControl
 
         public void chkNoClickChange()
         {
-            kinectCtrl.doClick = !chkNoClick.IsChecked.Value;
+           // kinectCtrl.doClick = !chkNoClick.IsChecked.Value;
             Properties.Settings.Default.DoClick = kinectCtrl.doClick;
             Properties.Settings.Default.Save();
         }
@@ -141,7 +141,8 @@ namespace KinectV2MouseControl
 
         public void rdiGripGestureChange()
         {
-            kinectCtrl.useGripGesture = rdiGrip.IsChecked.Value;
+            //kinectCtrl.useGripGesture = rdiGrip.IsChecked.Value;
+            kinectCtrl.useGripGesture = true;
             Properties.Settings.Default.GripGesture = kinectCtrl.useGripGesture;
             Properties.Settings.Default.Save();
         }
@@ -156,6 +157,7 @@ namespace KinectV2MouseControl
             rdiGripGestureChange();
         }
 
+        /*
         private void CursorSmoothing_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (CursorSmoothing.IsLoaded)
@@ -167,6 +169,7 @@ namespace KinectV2MouseControl
                 Properties.Settings.Default.Save();
             }
         }
+        */
 
 
     }

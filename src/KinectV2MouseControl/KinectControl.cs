@@ -57,7 +57,7 @@ namespace KinectV2MouseControl
         public float cursorSmoothing = CURSOR_SMOOTHING;
 
         // Default values
-        public const float MOUSE_SENSITIVITY = 3.0f;
+        public const float MOUSE_SENSITIVITY = 1.0f;
         public const float TIME_REQUIRED = 2f;
         public const float PAUSE_THRESOLD = 20f;
         public const bool DO_CLICK = true;
@@ -193,8 +193,6 @@ namespace KinectV2MouseControl
                     CameraSpacePoint spineBase = body.Joints[JointType.SpineBase].Position;
                     CameraSpacePoint handTip = body.Joints[JointType.HandTipRight].Position;
                     
-                    if (handRight.Z - spineBase.Z < -0.15f) // if right hand lift forward
-                    {
                         /* hand x calculated by this. we don't use shoulder right as a reference cause the shoulder right
                          * is usually behind the lift right hand, and the position would be inferred and unstable.
                          * because the spine base is on the left of right hand, we plus 0.05f to make it closer to the right. */
@@ -205,7 +203,7 @@ namespace KinectV2MouseControl
                         // get current cursor position
                         Point curPos = MouseControl.GetCursorPosition();
                         // smoothing for using should be 0 - 0.95f. The way we smooth the cusor is: oldPos + (newPos - oldPos) * smoothValue
-                        float smoothing = 0.90f;
+                        float smoothing = 0.95f;
                         // set cursor position
                         MouseControl.SetCursorPos((int)(curPos.X + (x  * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
                         
@@ -235,8 +233,7 @@ namespace KinectV2MouseControl
                                 }
                             }
                         }
-                    }
-                    else if (handLeft.Z - spineBase.Z < -0.15f) // if left hand lift forward
+                    /*else if (handLeft.Z - spineBase.Z < -0.15f) // if left hand lift forward
                     {
                         float x = handLeft.X - spineBase.X + 0.5f;
                         float y = spineBase.Y - handLeft.Y + 0.51f;
@@ -266,7 +263,7 @@ namespace KinectV2MouseControl
                                 }
                             }
                         }
-                    }
+                    }*/
                     else
                     {
                         wasLeftGrip = true;
