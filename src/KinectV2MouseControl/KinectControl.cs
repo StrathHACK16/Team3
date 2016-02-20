@@ -57,12 +57,12 @@ namespace KinectV2MouseControl
         public float cursorSmoothing = CURSOR_SMOOTHING;
 
         // Default values
-        public const float MOUSE_SENSITIVITY = 3.0f;
+        public const float MOUSE_SENSITIVITY = 3.5f;
         public const float TIME_REQUIRED = 2f;
-        public const float PAUSE_THRESOLD = 20f;
+        public const float PAUSE_THRESOLD = 60f;
         public const bool DO_CLICK = true;
         public const bool USE_GRIP_GESTURE = true;
-        public const float CURSOR_SMOOTHING = 0.95f;
+        public const float CURSOR_SMOOTHING = 0.2f;
 
         /// <summary>
         /// Determine if we have tracked the hand and used it to move the cursor,
@@ -88,10 +88,6 @@ namespace KinectV2MouseControl
         /// </summary>
         bool wasRightGrip = false;
 
-        //public object InteractionHandPointer { get; private set; 
-
-        //private InteractionHandPointer[] handPointers;
-
         public KinectControl()
         {
             // get Active Kinect Sensor
@@ -105,7 +101,7 @@ namespace KinectV2MouseControl
             screenHeight = (int)SystemParameters.PrimaryScreenHeight;
 
             // set up timer, execute every 0.1s
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 100); 
+           timer.Interval = new TimeSpan(0, 0, 0, 0, 100); 
 　　　　    timer.Tick += new EventHandler(Timer_Tick);
 　　　　    timer.Start();
 
@@ -135,8 +131,8 @@ namespace KinectV2MouseControl
             {
                 if ((timeCount += 0.1f) > timeRequired)
                 {
-                    MouseControl.MouseLeftDown();
-                    MouseControl.MouseLeftUp();
+                    //MouseControl.MouseLeftDown();
+                    //MouseControl.MouseLeftUp();
                     MouseControl.DoMouseClick();
                     timeCount = 0;
                 }
@@ -191,10 +187,23 @@ namespace KinectV2MouseControl
                     CameraSpacePoint handLeft = body.Joints[JointType.HandLeft].Position;
                     CameraSpacePoint handRight = body.Joints[JointType.HandRight].Position;
                     CameraSpacePoint spineBase = body.Joints[JointType.SpineBase].Position;
-                    CameraSpacePoint handTip = body.Joints[JointType.HandTipRight].Position;
-                    
-                    if (handRight.Z - spineBase.Z < -0.15f) // if right hand lift forward
+
+                    if (handRight.Z - spineBase.Z < -0.15f && handLeft.Z - spineBase.Z < -0.15f)
                     {
+                        if (!wasLeftGrip)
+                        {
+                            Console.Write("Double click!!!");
+                            MouseControl.DoMouseClick();
+                            MouseControl.DoMouseClick();
+                            wasLeftGrip = true;
+                        }
+
+                    }
+                    else if (handRight.Z - spineBase.Z < -0.15f) // if right hand lift forward
+                    {
+                        if(handLeft.Z - spineBase.Z > -0.15f)
+                            wasLeftGrip = false;
+
                         /* hand x calculated by this. we don't use shoulder right as a reference cause the shoulder right
                          * is usually behind the lift right hand, and the position would be inferred and unstable.
                          * because the spine base is on the left of right hand, we plus 0.05f to make it closer to the right. */
@@ -205,23 +214,19 @@ namespace KinectV2MouseControl
                         // get current cursor position
                         Point curPos = MouseControl.GetCursorPosition();
                         // smoothing for using should be 0 - 0.95f. The way we smooth the cusor is: oldPos + (newPos - oldPos) * smoothValue
-                        float smoothing = 0.90f;
+                        float smoothing = 1 - cursorSmoothing;
                         // set cursor position
                         MouseControl.SetCursorPos((int)(curPos.X + (x  * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
                         
                         alreadyTrackedPos = true;
-
-                        
 
                         // Grip gesture
                         if (doClick && useGripGesture)
                         {
                             if (body.HandRightState == HandState.Closed)
                             {
-                            
                                 if (!wasRightGrip)
                                 {
-                            
                                     MouseControl.MouseLeftDown();
                                     wasRightGrip = true;
                                 }
@@ -235,13 +240,14 @@ namespace KinectV2MouseControl
                                 }
                             }
                         }
+                        
                     }
                     else if (handLeft.Z - spineBase.Z < -0.15f) // if left hand lift forward
                     {
-                        float x = handLeft.X - spineBase.X + 0.5f;
+                        float x = handLeft.X - spineBase.X + 0.3f;
                         float y = spineBase.Y - handLeft.Y + 0.51f;
                         Point curPos = MouseControl.GetCursorPosition();
-                        float smoothing = 0.95f;
+                        float smoothing = 1 - cursorSmoothing;
                         MouseControl.SetCursorPos((int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
                         alreadyTrackedPos = true;
 
@@ -249,10 +255,8 @@ namespace KinectV2MouseControl
                         {
                             if (body.HandLeftState == HandState.Closed)
                             {
-                               
                                 if (!wasLeftGrip)
                                 {
-                                    
                                     MouseControl.MouseLeftDown();
                                     wasLeftGrip = true;
                                 }
