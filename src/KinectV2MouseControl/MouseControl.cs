@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace KinectV2MouseControl
 {
@@ -18,8 +19,7 @@ namespace KinectV2MouseControl
 
         public static void DoMouseClick()
         {
-            MouseLeftDown();
-            MouseLeftUp();
+            mouse_event(MouseEventFlag.RightUp | MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
         }
 
         public static void MouseScrollUpDown(int value)
@@ -32,6 +32,28 @@ namespace KinectV2MouseControl
         {
             value *= 120;
             mouse_event(MouseEventFlag.HWheel, 0, 0, (uint)value, UIntPtr.Zero);
+        }
+
+        public static void DoDoubleClick()
+        {
+            DoMouseClick();
+            Thread.Sleep(150);
+            DoMouseClick();
+        }
+
+        public static void MouseRightDown()
+        {
+            mouse_event(MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+        }
+
+        public static void MouseRightUp()
+        {
+            mouse_event(MouseEventFlag.RightUp, 0, 0, 0, UIntPtr.Zero);
+        }
+
+        public static void DoRightClick()
+        {
+            mouse_event(MouseEventFlag.RightUp | MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
         }
 
         [DllImport("user32.dll")]

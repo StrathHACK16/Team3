@@ -47,12 +47,12 @@ namespace KinectV2MouseControl
         /// <summary>
         /// Decide if the user need to do clicks or only move the cursor
         /// </summary>
-        public bool doClick = DO_CLICK;
         /// <summary>
         /// Use Grip gesture to click or not
         /// </summary>
         public bool useGripGesture = USE_GRIP_GESTURE;
         public bool useLassoGesture = USE_LASSO_GESTURE;
+        public bool mouseCanMove = MOUSE_CAN_MOVE;
         /// <summary>
         /// Value 0 - 0.95f, the larger it is, the smoother the cursor would move
         /// </summary>
@@ -62,10 +62,10 @@ namespace KinectV2MouseControl
         public const float MOUSE_SENSITIVITY = 1.0f;
         public const float TIME_REQUIRED = 2f;
         public const float PAUSE_THRESOLD = 60f;
-        public const bool DO_CLICK = true;
         public const bool USE_GRIP_GESTURE = true;
         public const bool USE_LASSO_GESTURE = true;
         public const float CURSOR_SMOOTHING = 0.95f;
+        public const bool MOUSE_CAN_MOVE = true;
 
         /// <summary>
         /// Determine if we have tracked the hand and used it to move the cursor,
@@ -77,6 +77,9 @@ namespace KinectV2MouseControl
         /// for storing the time passed for pause-to-click
         /// </summary>
         float timeCount = 0;
+        float x = 0;
+        float y = 0;
+        float smoothing = 0.95f;
         /// <summary>
         /// For storing last cursor position
         /// </summary>
@@ -121,7 +124,7 @@ namespace KinectV2MouseControl
         /// <param name="e"></param>
         void Timer_Tick(object sender, EventArgs e)
         {
-            if (!doClick || useGripGesture || useLassoGesture) return;
+            if (useGripGesture || useLassoGesture) return;
 
             if (!alreadyTrackedPos) {
                 timeCount = 0;
@@ -175,35 +178,35 @@ namespace KinectV2MouseControl
                     CameraSpacePoint handRight = body.Joints[JointType.HandRight].Position;
                     CameraSpacePoint spineBase = body.Joints[JointType.SpineBase].Position;
                     CameraSpacePoint handTip = body.Joints[JointType.HandTipRight].Position;
-                    
+                    if (mouseCanMove)
+                    {
                         /* hand x calculated by this. we don't use shoulder right as a reference cause the shoulder right
                          * is usually behind the lift right hand, and the position would be inferred and unstable.
                          * because the spine base is on the left of right hand, we plus 0.05f to make it closer to the right. */
-                        float x = handRight.X - spineBase.X + 0.05f;
+                        x = handRight.X - spineBase.X + 0.05f;
                         /* hand y calculated by this. ss spine base is way lower than right hand, we plus 0.51f to make it
                          * higer, the value 0.51f is worked out by testing for a several times, you can set it as another one you like. */
-                        float y = spineBase.Y - handRight.Y + 0.51f;
+                        y = spineBase.Y - handRight.Y + 0.51f;
                         // get current cursor position
                         Point curPos = MouseControl.GetCursorPosition();
-                        // smoothing for using should be 0 - 0.95f. The way we smooth the cusor is: oldPos + (newPos - oldPos) * smoothValue
-                        float smoothing = 0.95f;
                         // set cursor position
-                        MouseControl.SetCursorPos((int)(curPos.X + (x  * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
-                        
+                        MouseControl.SetCursorPos((int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
+                    }
                         alreadyTrackedPos = true;
 
 
 
                     // Grip gesture
-                    if (doClick)
+                    if(handLeft.Y < spineBase.Y || body.HandLeftState == HandState.Open)
                     {
+                        mouseCanMove = true;
                         if (useGripGesture)
                         {
                             if (body.HandRightState == HandState.Closed)
                             {
                                 if (!wasRightGrip)
                                 {
-                                    if(body.HandRightState == HandState.Closed)
+                                    if (body.HandRightState == HandState.Closed)
                                     {
                                         MouseControl.MouseLeftDown();
                                         wasRightGrip = true;
@@ -234,6 +237,49 @@ namespace KinectV2MouseControl
                                 {
                                     MouseControl.MouseScrollUpDown(-4);
                                 }
+                            }
+                        }
+                    }
+                    else if(handLeft.Y > spineBase.Y && body.HandLeftState == HandState.Closed)
+                    {
+                        mouseCanMove = false;
+                        if (useGripGesture)
+                        {
+                            if (body.HandRightState == HandState.Closed)
+                            {
+                                if (body.HandRightState == HandState.Closed)
+                                {
+                                    MouseControl.DoMouseClick();
+                                }
+                            }
+                        }
+                        if (useLassoGesture)
+                        {
+                            if (body.HandRightState == HandState.Lasso)
+                            {
+                                MouseControl.DoDoubleClick();
+                            }
+                        }
+                    }
+                    else if(handLeft.Y > spineBase.Y && body.HandLeftState == HandState.Lasso)
+                    {
+                        mouseCanMove = false;
+                        if (useGripGesture)
+                        {
+                            if (body.HandRightState == HandState.Closed)
+                            {
+                                if (body.HandRightState == HandState.Closed)
+                                {
+                                    MouseControl.DoRightClick();
+                                }
+                            }
+                        }
+                        if (useLassoGesture)
+                        {
+                            if (body.HandRightState == HandState.Lasso)
+                            {
+                                //Zoom
+                                MessageBox.Show("Weee");
                             }
                         }
                     }

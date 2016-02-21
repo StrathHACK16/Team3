@@ -56,7 +56,6 @@ namespace KinectV2MouseControl
 
         public void chkNoClickChange()
         {
-            Properties.Settings.Default.DoClick = kinectCtrl.doClick;
             Properties.Settings.Default.Save();
         }
 
