@@ -86,4 +86,6 @@ namespace KinectV2MouseControl
             rdiGripGestureChange();
         }
     }
+
+
 }

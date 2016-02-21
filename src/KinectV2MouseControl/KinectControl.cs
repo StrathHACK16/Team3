@@ -65,31 +65,23 @@ namespace KinectV2MouseControl
         public const bool USE_GRIP_GESTURE = true;
         public const bool USE_LASSO_GESTURE = true;
         public const float CURSOR_SMOOTHING = 0.95f;
-        public const bool MOUSE_CAN_MOVE = true;
+        public const bool MOUSE_CAN_MOVE = false;
 
         /// <summary>
         /// Determine if we have tracked the hand and used it to move the cursor,
         /// If false, meaning the user may not lift their hands, we don't get the last hand position and some actions like pause-to-click won't be executed.
         /// </summary>
         bool alreadyTrackedPos = false;
-
-        /// <summary>
-        /// for storing the time passed for pause-to-click
-        /// </summary>
-        float timeCount = 0;
         float x = 0;
         float y = 0;
         float smoothing = 0.95f;
         float pxd = 0;
+        bool held = false;
         /// <summary>
         /// For storing last cursor position
         /// </summary>
         Point lastCurPos = new Point(0, 0);
-
-        /// <summary>
-        /// If true, user did a left hand Grip gesture
-        /// </summary>
-        bool wasLeftGrip = false;
+        float timeCount = 0;
         /// <summary>
         /// If true, user did a right hand Grip gesture
         /// </summary>
@@ -195,10 +187,12 @@ namespace KinectV2MouseControl
                     }
                         alreadyTrackedPos = true;
 
-
-
+                    if(held && body.HandRightState == HandState.Open)
+                    {
+                        held = false;
+                    }
                     // Grip gesture
-                    if(handLeft.Y < spineBase.Y || body.HandLeftState == HandState.Open)
+                    else if(handLeft.Y > spineBase.Y && body.HandLeftState == HandState.Open)
                     {
                         mouseCanMove = true;
                         if (useGripGesture)
@@ -257,17 +251,19 @@ namespace KinectV2MouseControl
                         {
                             if (body.HandRightState == HandState.Closed)
                             {
-                                if (body.HandRightState == HandState.Closed)
+                                if (body.HandRightState == HandState.Closed && !held)
                                 {
                                     MouseControl.DoMouseClick();
+                                    held = true;
                                 }
                             }
                         }
                         if (useLassoGesture)
                         {
-                            if (body.HandRightState == HandState.Lasso)
+                            if (body.HandRightState == HandState.Lasso && !held)
                             {
                                 MouseControl.DoDoubleClick();
+                                held = true;
                             }
                         }
                     }
@@ -309,7 +305,6 @@ namespace KinectV2MouseControl
                     }
                     else
                     {
-                        wasLeftGrip = true;
                         wasRightGrip = true;
                         alreadyTrackedPos = false;
                     }
