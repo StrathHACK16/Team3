@@ -59,7 +59,7 @@ namespace KinectV2MouseControl
         public float cursorSmoothing = CURSOR_SMOOTHING;
 
         // Default values
-        public const float MOUSE_SENSITIVITY = 1.0f;
+        public const float MOUSE_SENSITIVITY = 2.0f;
         public const float TIME_REQUIRED = 2f;
         public const float PAUSE_THRESOLD = 60f;
         public const bool USE_GRIP_GESTURE = true;
