@@ -3,6 +3,7 @@ using System.Windows;
 using System.Runtime.InteropServices;
 using System.Windows.Threading;
 using Microsoft.Kinect;
+using System.Threading;
 
 namespace KinectV2MouseControl
 {
@@ -51,18 +52,20 @@ namespace KinectV2MouseControl
         /// Use Grip gesture to click or not
         /// </summary>
         public bool useGripGesture = USE_GRIP_GESTURE;
+        public bool useLassoGesture = USE_LASSO_GESTURE;
         /// <summary>
         /// Value 0 - 0.95f, the larger it is, the smoother the cursor would move
         /// </summary>
         public float cursorSmoothing = CURSOR_SMOOTHING;
 
         // Default values
-        public const float MOUSE_SENSITIVITY = 3.5f;
+        public const float MOUSE_SENSITIVITY = 1.0f;
         public const float TIME_REQUIRED = 2f;
         public const float PAUSE_THRESOLD = 60f;
         public const bool DO_CLICK = true;
         public const bool USE_GRIP_GESTURE = true;
-        public const float CURSOR_SMOOTHING = 0.2f;
+        public const bool USE_LASSO_GESTURE = true;
+        public const float CURSOR_SMOOTHING = 0.95f;
 
         /// <summary>
         /// Determine if we have tracked the hand and used it to move the cursor,
@@ -118,7 +121,7 @@ namespace KinectV2MouseControl
         /// <param name="e"></param>
         void Timer_Tick(object sender, EventArgs e)
         {
-            if (!doClick || useGripGesture) return;
+            if (!doClick || useGripGesture || useLassoGesture) return;
 
             if (!alreadyTrackedPos) {
                 timeCount = 0;
@@ -126,22 +129,6 @@ namespace KinectV2MouseControl
             }
             
             Point curPos = MouseControl.GetCursorPosition();
-
-            if ((lastCurPos - curPos).Length < pauseThresold)
-            {
-                if ((timeCount += 0.1f) > timeRequired)
-                {
-                    //MouseControl.MouseLeftDown();
-                    //MouseControl.MouseLeftUp();
-                    MouseControl.DoMouseClick();
-                    timeCount = 0;
-                }
-            }
-            else
-            {
-                timeCount = 0;
-            }
-
             lastCurPos = curPos;
         }
 
@@ -187,23 +174,8 @@ namespace KinectV2MouseControl
                     CameraSpacePoint handLeft = body.Joints[JointType.HandLeft].Position;
                     CameraSpacePoint handRight = body.Joints[JointType.HandRight].Position;
                     CameraSpacePoint spineBase = body.Joints[JointType.SpineBase].Position;
-
-                    if (handRight.Z - spineBase.Z < -0.15f && handLeft.Z - spineBase.Z < -0.15f)
-                    {
-                        if (!wasLeftGrip)
-                        {
-                            Console.Write("Double click!!!");
-                            MouseControl.DoMouseClick();
-                            MouseControl.DoMouseClick();
-                            wasLeftGrip = true;
-                        }
-
-                    }
-                    else if (handRight.Z - spineBase.Z < -0.15f) // if right hand lift forward
-                    {
-                        if(handLeft.Z - spineBase.Z > -0.15f)
-                            wasLeftGrip = false;
-
+                    CameraSpacePoint handTip = body.Joints[JointType.HandTipRight].Position;
+                    
                         /* hand x calculated by this. we don't use shoulder right as a reference cause the shoulder right
                          * is usually behind the lift right hand, and the position would be inferred and unstable.
                          * because the spine base is on the left of right hand, we plus 0.05f to make it closer to the right. */
@@ -214,21 +186,28 @@ namespace KinectV2MouseControl
                         // get current cursor position
                         Point curPos = MouseControl.GetCursorPosition();
                         // smoothing for using should be 0 - 0.95f. The way we smooth the cusor is: oldPos + (newPos - oldPos) * smoothValue
-                        float smoothing = 1 - cursorSmoothing;
+                        float smoothing = 0.95f;
                         // set cursor position
                         MouseControl.SetCursorPos((int)(curPos.X + (x  * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
                         
                         alreadyTrackedPos = true;
 
-                        // Grip gesture
-                        if (doClick && useGripGesture)
+
+
+                    // Grip gesture
+                    if (doClick)
+                    {
+                        if (useGripGesture)
                         {
                             if (body.HandRightState == HandState.Closed)
                             {
                                 if (!wasRightGrip)
                                 {
-                                    MouseControl.MouseLeftDown();
-                                    wasRightGrip = true;
+                                    if(body.HandRightState == HandState.Closed)
+                                    {
+                                        MouseControl.MouseLeftDown();
+                                        wasRightGrip = true;
+                                    }
                                 }
                             }
                             else if (body.HandRightState == HandState.Open)
@@ -240,33 +219,20 @@ namespace KinectV2MouseControl
                                 }
                             }
                         }
-                        
-                    }
-                    else if (handLeft.Z - spineBase.Z < -0.15f) // if left hand lift forward
-                    {
-                        float x = handLeft.X - spineBase.X + 0.3f;
-                        float y = spineBase.Y - handLeft.Y + 0.51f;
-                        Point curPos = MouseControl.GetCursorPosition();
-                        float smoothing = 1 - cursorSmoothing;
-                        MouseControl.SetCursorPos((int)(curPos.X + (x * mouseSensitivity * screenWidth - curPos.X) * smoothing), (int)(curPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - curPos.Y) * smoothing));
-                        alreadyTrackedPos = true;
-
-                        if (doClick && useGripGesture)
+                        //Use Lasso Gesture
+                        if (useLassoGesture)
                         {
-                            if (body.HandLeftState == HandState.Closed)
+                            if (body.HandRightState == HandState.Lasso)
                             {
-                                if (!wasLeftGrip)
+                                Point newPos = MouseControl.GetCursorPosition();
+                                float yd = (int)(newPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - newPos.Y) * smoothing);
+                                if (yd > newPos.Y)
                                 {
-                                    MouseControl.MouseLeftDown();
-                                    wasLeftGrip = true;
+                                    MouseControl.MouseScrollUpDown(4);
                                 }
-                            }
-                            else if (body.HandLeftState == HandState.Open)
-                            {
-                                if (wasLeftGrip)
+                                else if (yd < newPos.Y)
                                 {
-                                    MouseControl.MouseLeftUp();
-                                    wasLeftGrip = false;
+                                    MouseControl.MouseScrollUpDown(-4);
                                 }
                             }
                         }
