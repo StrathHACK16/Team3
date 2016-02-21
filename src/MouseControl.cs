@@ -65,6 +65,20 @@ namespace SomethingDinosaurRelated
         {
             keybd_event(0x11, 0, 0x0002, 0);
         }
+        public static void minimise()
+        {
+            keybd_event(0x12, 0, 0, 0);// Alt
+            keybd_event(0x20, 0, 0, 0);// Space
+            Thread.Sleep(100);
+            keybd_event(0x4E, 0, 0, 0);// N
+
+
+
+            keybd_event(0x4E, 0, 0x0002, 0);
+            keybd_event(0x20, 0, 0x0002, 0);
+            keybd_event(0x12, 0, 0x0002, 0);
+
+        }
 
         [DllImport("user32.dll")]
         public static extern bool SetCursorPos(int X, int Y);

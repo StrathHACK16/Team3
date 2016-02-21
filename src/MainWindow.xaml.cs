@@ -98,6 +98,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
         public MainWindow()
         {
             this.InitializeComponent();
+
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
         private static RecognizerInfo TryGetKinectRecognizer()
         {
             IEnumerable<RecognizerInfo> recognizers;
-            
+
             // This is required to catch the case when an expected recognizer is not installed.
             // By default - the x86 Speech Runtime is always expected. 
             try
@@ -152,7 +153,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
             {
                 string value;
                 recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
-                if ("True".Equals(value, StringComparison.OrdinalIgnoreCase) && "en-GB".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
+                if ("True".Equals(value, StringComparison.OrdinalIgnoreCase) && "en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     return recognizer;
                 }
@@ -229,7 +230,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
 
                 this.speechEngine.SpeechRecognized += this.SpeechRecognized;
                 this.speechEngine.SpeechRecognitionRejected += this.SpeechRejected;
-        
+
                 // let the convertStream know speech is going active
                 this.convertStream.SpeechActive = true;
 
@@ -308,7 +309,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
             {
                 switch (e.Result.Semantics.Value.ToString())
                 {
-                    case "FORWARD":
+                    /*case "FORWARD":
                         forwardSpan.Foreground = Brushes.DeepSkyBlue;
                         forwardSpan.FontWeight = FontWeights.Bold;
                         turtleTranslation.X = (playArea.Width + turtleTranslation.X + (DisplacementAmount * Displacements[this.curDirection].X)) % playArea.Width;
@@ -338,7 +339,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
 
                         // We take a right turn to mean a clockwise right angle rotation for the displayed turtle.
                         turtleRotation.Angle += DegreesInRightAngle;
-                        break;
+                        break;*/
                     case "START":
                         kinectCtrl.startSpeech = true;
                         MessageBox.Show("Starting gesture detection");
@@ -346,6 +347,9 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
                     case "FALSE":
                         kinectCtrl.startSpeech = false;
                         MessageBox.Show("Stopping gesture detection");
+                        break;
+                    case "MINIMIZE":
+                        kinectCtrl.minimise();
                         break;
                 }
             }
@@ -362,7 +366,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
         }
 
         //Kinect
-       
+
 
         private void chkNoClick_Checked(object sender, RoutedEventArgs e)
         {

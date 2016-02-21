@@ -110,8 +110,12 @@ namespace SomethingDinosaurRelated
             sensor.Open();
         }
 
+        public void minimise()
+        {
+            MouseControl.minimise();
+        }
 
-        
+
         /// <summary>
         /// Pause to click timer
         /// </summary>
