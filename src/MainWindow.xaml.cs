@@ -18,7 +18,7 @@ namespace Microsoft.Samples.Kinect.SpeechBasics
     using Microsoft.Kinect;
     using Microsoft.Speech.AudioFormat;
     using Microsoft.Speech.Recognition;
-    using KinectV2MouseControl;
+    using SomethingDinosaurRelated;
     /// <summary>
     /// Interaction logic for MainWindow
     /// </summary>

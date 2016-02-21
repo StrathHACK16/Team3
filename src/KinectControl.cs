@@ -5,7 +5,7 @@ using System.Windows.Threading;
 using Microsoft.Kinect;
 using System.Threading;
 
-namespace KinectV2MouseControl
+namespace SomethingDinosaurRelated
 {
     class KinectControl
     {
