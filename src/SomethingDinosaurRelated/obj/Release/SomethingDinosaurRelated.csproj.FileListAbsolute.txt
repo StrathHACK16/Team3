@@ -1,0 +1,17 @@
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\bin\Release\KinectV2MouseControl.exe.config
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\bin\Release\KinectV2MouseControl.exe
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\bin\Release\KinectV2MouseControl.pdb
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\bin\Release\Microsoft.Kinect.dll
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\bin\Release\Microsoft.Kinect.xml
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\MainWindow.baml
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\MainWindow.g.cs
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\App.g.cs
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl_MarkupCompile.cache
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.g.resources
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.Properties.Resources.resources
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\SomethingDinosaurRelated.csproj.GenerateResource.Cache
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.exe
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\KinectV2MouseControl\obj\Release\KinectV2MouseControl.pdb
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\SomethingDinosaurRelated\bin\Release\KinectV2MouseControl.exe.config
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\SomethingDinosaurRelated\obj\Release\KinectV2MouseControl.exe
+C:\Users\Jack\Documents\Projects\Kinect\Team3\src\SomethingDinosaurRelated\obj\Release\KinectV2MouseControl.pdb
