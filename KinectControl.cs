@@ -66,7 +66,7 @@ namespace KinectV2MouseControl
         public const bool USE_LASSO_GESTURE = true;
         public const float CURSOR_SMOOTHING = 0.95f;
         public const bool MOUSE_CAN_MOVE = false;
-
+        public bool startSpeech = false;
         /// <summary>
         /// Determine if we have tracked the hand and used it to move the cursor,
         /// If false, meaning the user may not lift their hands, we don't get the last hand position and some actions like pause-to-click won't be executed.
@@ -86,6 +86,8 @@ namespace KinectV2MouseControl
         /// If true, user did a right hand Grip gesture
         /// </summary>
         bool wasRightGrip = false;
+
+        
 
         public KinectControl()
         {
@@ -164,8 +166,9 @@ namespace KinectV2MouseControl
             {
 
                 // get first tracked body only, notice there's a break below.
-                if (body.IsTracked)
+                if (body.IsTracked && startSpeech)
                 {
+                    
                     // get various skeletal positions
                     CameraSpacePoint handLeft = body.Joints[JointType.HandLeft].Position;
                     CameraSpacePoint handRight = body.Joints[JointType.HandRight].Position;
@@ -192,7 +195,7 @@ namespace KinectV2MouseControl
                         held = false;
                     }
                     // Grip gesture
-                    else if(handLeft.Y > spineBase.Y && body.HandLeftState == HandState.Open)
+                    else if(body.HandLeftState == HandState.Open)
                     {
                         mouseCanMove = true;
                         if (useGripGesture)
