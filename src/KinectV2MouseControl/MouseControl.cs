@@ -24,13 +24,13 @@ namespace KinectV2MouseControl
 
         public static void MouseScrollUpDown(int value)
         {
-            value *= 120;
+            value *= 30;
             mouse_event(MouseEventFlag.Wheel, 0, 0, (uint)value, UIntPtr.Zero);
         }
 
         public static void MouseScrollLeftRight(int value)
         {
-            value *= 120;
+            value *= 30;
             mouse_event(MouseEventFlag.HWheel, 0, 0, (uint)value, UIntPtr.Zero);
         }
 
@@ -56,8 +56,20 @@ namespace KinectV2MouseControl
             mouse_event(MouseEventFlag.RightUp | MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
         }
 
+        public static void CtrlDown()
+        {
+            keybd_event(0x11, 0, 0, 0);
+        }
+
+        public static void CtrlUp()
+        {
+            keybd_event(0x11, 0, 0x0002, 0);
+        }
+
         [DllImport("user32.dll")]
         public static extern bool SetCursorPos(int X, int Y);
+        [DllImport("user32.dll")]
+        static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
         [DllImport("user32.dll")]
         static extern void mouse_event(MouseEventFlag flags, int dx, int dy, uint data, UIntPtr extraInfo);
         [Flags]

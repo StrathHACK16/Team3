@@ -80,6 +80,7 @@ namespace KinectV2MouseControl
         float x = 0;
         float y = 0;
         float smoothing = 0.95f;
+        float pxd = 0;
         /// <summary>
         /// For storing last cursor position
         /// </summary>
@@ -229,6 +230,7 @@ namespace KinectV2MouseControl
                             {
                                 Point newPos = MouseControl.GetCursorPosition();
                                 float yd = (int)(newPos.Y + ((y + 0.25f) * mouseSensitivity * screenHeight - newPos.Y) * smoothing);
+                                float xd = (int)(newPos.X + ((y + 0.25f) * mouseSensitivity * screenHeight - newPos.X) * smoothing);
                                 if (yd > newPos.Y)
                                 {
                                     MouseControl.MouseScrollUpDown(4);
@@ -236,6 +238,14 @@ namespace KinectV2MouseControl
                                 else if (yd < newPos.Y)
                                 {
                                     MouseControl.MouseScrollUpDown(-4);
+                                }
+                                else if (xd < newPos.X)
+                                {
+                                    MouseControl.MouseScrollLeftRight(4);
+                                }
+                                else if (xd > newPos.X)
+                                {
+                                    MouseControl.MouseScrollLeftRight(-4);
                                 }
                             }
                         }
@@ -278,8 +288,22 @@ namespace KinectV2MouseControl
                         {
                             if (body.HandRightState == HandState.Lasso)
                             {
-                                //Zoom
-                                MessageBox.Show("Weee");
+                                float xd = (float)Math.Truncate((handRight.X - handLeft.X) *10)/10;
+                                Console.WriteLine(xd);
+                                if (xd > 0.2 && pxd != 0)
+                                {
+                                    MouseControl.CtrlDown();
+                                    if (pxd > xd)
+                                    {
+                                        MouseControl.MouseScrollUpDown(-1);
+                                    }
+                                    else if(pxd < xd)
+                                    {
+                                        MouseControl.MouseScrollUpDown(1);
+                                    }
+                                    MouseControl.CtrlUp();
+                                }
+                                pxd = xd;
                             }
                         }
                     }
