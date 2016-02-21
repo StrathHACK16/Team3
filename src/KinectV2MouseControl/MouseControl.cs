@@ -19,7 +19,7 @@ namespace KinectV2MouseControl
 
         public static void DoMouseClick()
         {
-            mouse_event(MouseEventFlag.RightUp | MouseEventFlag.RightDown, 0, 0, 0, UIntPtr.Zero);
+            mouse_event(MouseEventFlag.LeftUp | MouseEventFlag.LeftDown, 0, 0, 0, UIntPtr.Zero);
         }
 
         public static void MouseScrollUpDown(int value)
