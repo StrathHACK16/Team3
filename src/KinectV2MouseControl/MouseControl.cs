@@ -18,7 +18,20 @@ namespace KinectV2MouseControl
 
         public static void DoMouseClick()
         {
-            mouse_event(MouseEventFlag.LeftDown | MouseEventFlag.LeftUp, 0, 0, 0, UIntPtr.Zero);
+            MouseLeftDown();
+            MouseLeftUp();
+        }
+
+        public static void MouseScrollUpDown(int value)
+        {
+            value *= 120;
+            mouse_event(MouseEventFlag.Wheel, 0, 0, (uint)value, UIntPtr.Zero);
+        }
+
+        public static void MouseScrollLeftRight(int value)
+        {
+            value *= 120;
+            mouse_event(MouseEventFlag.HWheel, 0, 0, (uint)value, UIntPtr.Zero);
         }
 
         [DllImport("user32.dll")]
@@ -38,6 +51,7 @@ namespace KinectV2MouseControl
             XDown = 0x0080,
             XUp = 0x0100,
             Wheel = 0x0800,
+            HWheel = 0x1000,
             VirtualDesk = 0x4000,
             Absolute = 0x8000
         }
